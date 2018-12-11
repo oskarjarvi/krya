@@ -1,13 +1,30 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import * as firebase from 'firebase';
 import { AppLoading, Asset, Font, Icon } from 'expo';
+import Config from './constants/Config';
+
 import AppNavigator from './navigation/AppNavigator';
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
 
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+};
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
-
+  constructor(props)
+  {
+    super(props);
+    this.state = {
+      loading: true,
+      authenticated:false,
+    };
+    if(!firebase.apps.length) {firebase.initializeApp(Config.FireBaseConfig);}
+  }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -57,6 +74,5 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 });

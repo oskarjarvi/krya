@@ -1,14 +1,37 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
+import { createStackNavigator, createBottomTabNavigator, NavigationActions } from 'react-navigation';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import SickOne from '../screens/Sick/SickOne';
+import SickTwo from '../screens/Sick/SickTwo';
+import SickThree from '../screens/Sick/SickThree';
+import vabOne from '../screens/VAB/vabOne';
+import vabTwo from '../screens/VAB/vabTwo';
+import vabThree from '../screens/VAB/vabThree';
 
+const SickStack = createStackNavigator({
+  SickOne: SickOne,
+  SickTwo: SickTwo,
+  SickThree: SickThree,
+})
+SickStack.navigationOptions = {
+  header:null
+}
+const VabStack = createStackNavigator({
+VabOne: vabOne,
+VabTwo: vabTwo,
+VabThree: vabThree
+})
+VabStack.navigationOptions = {
+  header:null,
+}
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Sick: SickStack,
+  Vab: VabStack
 });
 
 HomeStack.navigationOptions = {
@@ -18,10 +41,10 @@ HomeStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+        ? `ios-information-circle${focused ? '' : '-outline'}`
+        : 'md-information-circle'
       }
-    />
+      />
   ),
 };
 
@@ -35,7 +58,7 @@ LinksStack.navigationOptions = {
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
+      />
   ),
 };
 
@@ -49,12 +72,24 @@ SettingsStack.navigationOptions = {
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
+      />
   ),
 };
 
-export default createBottomTabNavigator({
+
+
+
+
+
+const TabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
-});
+  SettingsStack,})
+
+
+
+  TabNavigator.navigationOptions = {
+    header:null
+  }
+
+  export default TabNavigator
