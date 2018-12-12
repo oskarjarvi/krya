@@ -15,6 +15,8 @@ import CustomButton from '../../components/CustomButton'
 import ProgressBar from '../../components/ProgressBar'
 import CustomHeader from '../../components/CustomHeader'
 import { NavigationActions } from 'react-navigation'
+import CustomIcon from '../../components/CustomIcon'
+
 
 export default class SickScreen extends React.Component {
   static navigationOptions = {
@@ -65,15 +67,15 @@ export default class SickScreen extends React.Component {
           <Logo></Logo>
           <View style={{width:50}}></View>
         </CustomHeader>
-
         <ProgressBar width={'33%'} />
+<CustomIcon iconName="baby-buggy"/>
         <View style={styles.container}>
           <View style={styles.text}>
             <Text style={styles.title}>Hur många dagar tror du att du stannar hemma? </Text>
             <Text style={styles.subtitle}> Detta är bara en uppskattning för att underlätta för din arbetsledare</Text>
           </View>
           <DayCounter color='#dd5f5f' daycount={this.state.daycount} updateDay={this.updateDay} handleToggle={this.handleToggle} toggled={this.state.toggled}/>
-          <CustomButton text="Nästa" color="#dd5f5f" route= {() => this.props.navigation.navigate('VabTwo')}/>
+          <CustomButton text="Nästa" color="#dd5f5f" route= {() => this.props.navigation.navigate('VabTwo', {Days: this.state.daycount})}/>
         </View>
       </View>
     );

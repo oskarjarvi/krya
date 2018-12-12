@@ -19,6 +19,8 @@ import CustomHeader from '../../components/CustomHeader'
 import * as firebase from 'firebase';
 import { NavigationActions } from 'react-navigation'
 import {CheckBox} from 'react-native-elements'
+import CustomIcon from '../../components/CustomIcon'
+
 export default class sickTwo extends React.Component {
   static navigationOptions = {
     header:null,
@@ -46,15 +48,15 @@ export default class sickTwo extends React.Component {
     } else {
       this.setState({ checkedBoxes: checkedBoxes.filter(a => a !== item) });
     }
-    console.log(checkedBoxes)
   }
   confirm()
   {
     const days = this.props.navigation.getParam('Days', 0)
-
-      firebase.database().ref('reports').push({
+    currentDate= new Date().toDateString()
+      firebase.database().ref('reports/sjukanmälan').push({
         ExpectedSickDays:days,
-        Reasons:this.state.checkedBoxes
+        Reasons:this.state.checkedBoxes,
+        Created: currentDate
       })
       .then(
         this.props.navigation.navigate('SickThree')
@@ -71,8 +73,9 @@ export default class sickTwo extends React.Component {
           <Logo></Logo>
           <View style={{width:50}}></View>
         </CustomHeader>
-
         <ProgressBar width={'66%'} />
+          <CustomIcon iconName="heart-outline"/>
+
         <View style={styles.container}>
           <Text style={styles.title}>Varför är du hemma?</Text>
           <FlatList
@@ -92,7 +95,7 @@ export default class sickTwo extends React.Component {
               </View>
             )}
             />
-          <CustomButton text="Bekräfta" color="teal" route={()=>this.confirm()}/>
+          <CustomButton text="Bekräfta" color="teal" route={()=>this.confirm()}width={200}/>
         </View>
       </ScrollView>
     );

@@ -15,6 +15,7 @@ import CustomButton from '../../components/CustomButton'
 import ProgressBar from '../../components/ProgressBar'
 import CustomHeader from '../../components/CustomHeader'
 import { NavigationActions } from 'react-navigation'
+import CustomIcon from '../../components/CustomIcon'
 
 
 export default class SickOne extends React.Component {
@@ -66,13 +67,15 @@ handleToggle =() =>
           <View style={{width:50}}></View>
         </CustomHeader>
       <ProgressBar width={120} />
+      <CustomIcon iconName="heart-outline"/>
       <View style={styles.container}>
         <View style={styles.text}>
         <Text style={styles.title}>Hur många dagar tror du att du stannar hemma? </Text>
         <Text style={styles.subtitle}> Detta är bara en uppskattning för att underlätta för din arbetsledare</Text>
         </View>
-        <DayCounter color='teal' daycount={this.state.daycount} updateDay={this.updateDay} handleToggle={this.handleToggle} toggled={this.state.toggled}/>
-        <CustomButton text="Nästa" color="teal" route={() => this.props.navigation.navigate('SickTwo', {Days: this.state.daycount})}/>
+        <DayCounter color='teal' daycount={this.state.daycount} updateDay={this.updateDay} handleToggle={this.handleToggle} toggled={this.state.toggled}
+          />
+        <CustomButton text="Nästa" color="teal" route={() => this.props.navigation.navigate('SickTwo', {Days: this.state.daycount})} width={200}/>
       </View>
     </View>
     );

@@ -15,6 +15,8 @@ import CustomButton from '../../components/CustomButton'
 import ProgressBar from '../../components/ProgressBar'
 import CustomHeader from '../../components/CustomHeader'
 import { NavigationActions } from 'react-navigation'
+import CustomIcon from '../../components/CustomIcon'
+
 
 export default class vabThree extends React.Component {
   static navigationOptions = {
@@ -32,16 +34,16 @@ export default class vabThree extends React.Component {
           <Logo></Logo>
           <View style={{width:50}}></View>
         </CustomHeader>
-
         <ProgressBar width={'100%'} />
         <View style={styles.container}>
+          <CustomIcon iconName="baby-buggy"/>
           <View style={styles.text}>
             <Text style={styles.title}>Kom snart tillbaka! </Text>
             <Text style={styles.subtitle}> Din arbetsledare har fått en notis och du kommer att bli meddelad vid varje steg under hanteringen</Text>
           </View>
 
           <CustomButton text="Se Anmälningar" color="#dd5f5f"/>
-          <CustomButton text="Tillbaka" color="#dd5f5f"/>
+          <CustomButton text="Tillbaka" color="#dd5f5f" route={()=>this.props.navigation.navigate('Home')}/>
         </View>
       </View>
     );
@@ -57,11 +59,12 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
     padding:20,
+    backgroundColor:'#ffd8d6'
   },
   title: {
     fontSize:35,
     fontWeight:'500',
-    marginBottom:25
+    marginBottom:15
   },
   subtitle: {
     fontSize:20,
@@ -70,7 +73,6 @@ const styles = StyleSheet.create({
   },
   text: {
     padding:30,
-    marginBottom:25,
   }
 
 

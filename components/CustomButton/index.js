@@ -18,7 +18,7 @@ export default class CustomButton extends React.Component {
     return (
         <TouchableOpacity
           onPress={this.props.route}
-          style={[styles.button, {backgroundColor: this.props.color}]}>
+          style={[styles.button, {backgroundColor: this.props.color, width: this.props.width}]}>
           <Text style={{color:'white'}}>{this.props.text}</Text>
         </TouchableOpacity>
     );
@@ -33,5 +33,6 @@ width:200,
 height:50,
 borderRadius:30,
 marginTop:30,
+margin:20,
 }
 });

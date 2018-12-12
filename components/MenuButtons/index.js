@@ -27,7 +27,7 @@ render(){
         size={50}
         style={styles.icon}
         />
-    <Text>{this.props.text} </Text>
+      <Text style={styles.text}>{this.props.text} </Text>
     </TouchableOpacity>
   </View>
   )
@@ -41,9 +41,13 @@ const styles = StyleSheet.create({
     width:'48%',
     alignItems:'center',
     justifyContent:'center',
-    backgroundColor:'pink',
+    backgroundColor:'#ffd8d6',
   },
   icon: {
     textAlign:'center'
+  },
+  text: {
+    margin:10,
+    fontWeight:'500',
   }
 })

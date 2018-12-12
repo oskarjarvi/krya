@@ -16,13 +16,30 @@ import CustomButton from '../../components/CustomButton'
 import ProgressBar from '../../components/ProgressBar'
 import CustomHeader from '../../components/CustomHeader'
 import { NavigationActions } from 'react-navigation'
+import * as firebase from 'firebase';
+import CustomIcon from '../../components/CustomIcon'
+
 
 export default class vabTwo extends React.Component {
   static navigationOptions = {
     header:null,
   };
 state = {
-  text: 'Yo'
+  text: ''
+}
+
+confirm()
+{
+  const days = this.props.navigation.getParam('Days', 0)
+  currentDate= new Date().toDateString()
+    firebase.database().ref('reports/vabanmälan').push({
+      ExpectedSickDays:days,
+      Reason:this.state.text,
+      Created: currentDate
+    })
+    .then(
+      this.props.navigation.navigate('VabThree')
+    )
 }
 
   render() {
@@ -37,17 +54,20 @@ state = {
         </CustomHeader>
 
         <ProgressBar width={'66%'} />
-        <View style={styles.container}>
+          <CustomIcon iconName="baby-buggy"/>
+
+        <ScrollView contentContainerStyle={styles.container} scrollEnabled={false}>
           <Text style={styles.title}>Varför är du hemma?</Text>
           <View style={[styles.text, {borderColor:'#dd5f5f'}]}>
             <TextInput
               multiline={true}
               numberOfLines={4}
               onChangeText={(text) => this.setState({text})}
-              value={this.state.text}/>
+              placeholder={'Beskriv varför du är hemma'}
+              value={this.state.text} />
           </View>
-          <CustomButton text="Bekräfta" color="#dd5f5f" route={()=> this.props.navigation.navigate('VabThree')}/>
-        </View>
+          <CustomButton text="Bekräfta" color="#dd5f5f" route={() => this.confirm()}/>
+        </ScrollView>
       </View>
     );
   }
@@ -74,13 +94,15 @@ const styles = StyleSheet.create({
   },
   text: {
     backgroundColor:'#ffdddd',
+    alignItems:'flex-start',
     width:250,
     borderRadius:25,
     borderWidth:1,
-    padding:40,
+    height:150,
+    paddingLeft:10,
+    paddingRight:10,
     fontSize:30,
     margin:50,
-    justifyContent:'flex-start'
   }
 
 
