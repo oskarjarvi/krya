@@ -9,6 +9,7 @@ import {
   View,
   Switch
 } from 'react-native';
+import { LinearGradient } from 'expo'
 
 export default class CustomButton extends React.Component {
 
@@ -16,10 +17,17 @@ export default class CustomButton extends React.Component {
   }
   render() {
     return (
-        <TouchableOpacity
-          onPress={this.props.route}
-          style={[styles.button, {backgroundColor: this.props.color, width: this.props.width}]}>
+      <TouchableOpacity
+      onPress={this.props.route}>
+      <LinearGradient
+      colors={['#78B5FA', '#9586FD']}
+      start={[0.01,0.51]}
+      end={[1,0.51]}
+      style={[styles.button, { width: this.props.width}]}>
+       
           <Text style={{color:'white'}}>{this.props.text}</Text>
+       
+        </LinearGradient>
         </TouchableOpacity>
     );
   }
@@ -29,10 +37,8 @@ const styles = StyleSheet.create({
 button:{
 justifyContent:'center',
 alignItems:'center',
-width:200,
 height:50,
 borderRadius:30,
 marginTop:30,
-margin:20,
 }
 });

@@ -7,130 +7,196 @@ import {
   Text,
   TouchableOpacity,
   View,
-
 } from 'react-native';
-import Modal from "react-native-modal";
-import Logo from '../components/Logo';
-import { WebBrowser } from 'expo';
+import Modal from "react-native-modalbox";
 import MenuButton from '../components/MenuButtons'
-import { MonoText } from '../components/StyledText';
-import CustomHeader from '../components/CustomHeader'
-import CustomButton from '../components/CustomButton'
-import PopUp from '../components/PopUp'
+import CustomButton from '../components/CustomButton';
+import PopUp from '../components/PopUp';
+import { getData } from '../services/ApiService';
+import ActiveReport from '../components/ActiveReportModal'
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-    header:null,
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Hur är läget?',
+    headerStyle: {
+      shadowColor: 'transparent',
+      elevation: 0,
+      shadowOpacity: 0,
+      backgroundColor: '#F0F0F1',
+      marginTop: 10,
+    },
+    headerTitleStyle: {
+      flex: 1,
+      textAlign: 'center',
+      alignSelf: 'center'
+    },
+    headerLeft: (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Modal')}
+        style={{ marginTop: 20, marginLeft: 20, width: 40, height: 40, }}>
+        <Image
+          source={require('../assets/images/menu.png')}
+          style={{ width: 20, height: 20, }}
+        />
+      </TouchableOpacity>
+    ),
+    headerRight: (
+      <View></View>
+    )
 
-  };
-  state= {
-    modalVisible:false,
-    popUpType: '',
-  }
 
-
-  handlePress(route)
+  })
+  state =
+    {
+      modalVisible: false,
+      popUpType: '',
+      data: false,
+      modalData: false,
+    }
+  componentWillMount() 
   {
-    this.setState({modalVisible: true, popUpType: route})
-
+    getData('home/locked')
+      .then(res => this.setState({ data: res }))
+    getData('modal/locked')
+      .then(res => this.setState({ modalData: res }))
   }
-  closeModal() {
-    this.setState({modalVisible:false})
-  }
-  modalcontentRender()
+  componentWillUnmount()
   {
-    if(this.state.popUpType == 'Phone')
-    {
-      return <PopUp iconName='phone' title='Vill du bli uppringd?' subtitle='Din arbetsledare får en notis om att kontakta dig'>
-        <CustomButton text="Nej" color="#f7be2e" route={()=> this.closeModal()} width={120}/>
-        <CustomButton text="Ja" color="#f7be2e" route={()=> this.handlePress('PhoneNext')} width={120}/>
-      </PopUp>
+    this.closeModal()
+  }
+  renderMenu() 
+  {
+    if (this.state.data) {
+      return this.state.data.map((item, i) => {
+        const id = item.id.toString()
+        return (
+          <MenuButton route={() => this.handlePress(id)} iconUrl={item.iconUrl} text={item.title} key={i} />
+        )
+      })
     }
-    if(this.state.popUpType == 'Work')
+    else 
     {
-      return <PopUp iconName='briefcase' title='Är du tillbaka på jobbet?' subtitle='Genom att bekräfta får din arbetsledare en notis att du är frisk'>
-        <CustomButton text="Nej" color="teal" route={()=> this.closeModal()} width={120}/>
-        <CustomButton text="Ja" color="teal" route={()=> this.handlePress('WorkNext')} width={120}/>
-      </PopUp>
-    }
-    if(this.state.popUpType == 'PhoneNext')
-    {
-      return <PopUp iconName='phone' title='Håll telefonen nära!' subtitle='Din arbetsledare får en notis om att kontakta dig'>
-        <CustomButton text="Ok" color="#f7be2e" route={()=> this.closeModal()} width={120}/>
-      </PopUp>
-    }
-    if(this.state.popUpType == 'WorkNext')
-    {
-      return <PopUp iconName='briefcase' title='Sådär!' subtitle='Din arbetsledare har blivit noterad. Ha en bra dag på jobbet!'>
-        <CustomButton text="Ok" color="teal" route={()=> this.closeModal()} width={120}/>
-      </PopUp>
+      console.log('FAILED')
     }
   }
+  handlePress(route) 
+  {
+    if (route == '1092') 
+    {
+      this.setState({ modalVisible: true, popUpType: 'Work' })
+    }
+    if (route == '1090') 
+    {
+      this.setState({ modalVisible: true, popUpType: 'Phone' })
+    }
+    if(route == 'active')
+    {
+      this.setState({modalVisible:true, popUpType:'Active'})
+    }
+    else 
+    {
+      this.props.navigation.navigate(route)
+    }
 
+  }
+  closeModal() 
+  {
+    this.setState({ modalVisible: false })
+  }
+  modalcontentRender() 
+  {
+    if(this.state.popUpType == 'Active')
+    {
+      return <ActiveReport title={'sjukanmäld'}startDate={'2018-01-20'} endDate={'2018-01-22'} close={() => this.closeModal()} back={() => this.props.navigation.navigate('Confirm')}/>
+    }
+    if (this.state.modalData) {
+      const { modalData } = this.state
+
+      if (this.state.popUpType == 'Phone') {
+        return <PopUp iconUrl={modalData[0].iconUrl} title={modalData[0].title} subtitle={modalData[0].subtitle} textcolor={'#' + modalData[0].textColor}>
+          <CustomButton text="Nej" color={'#' + modalData[0].buttonColor} route={() => this.closeModal()} width={120} />
+          <CustomButton text="Ja" color={'#' + modalData[0].buttonColor} route={() => this.handlePress('PhoneNext')} width={120} />
+        </PopUp>
+      }
+      if (this.state.popUpType == 'Work') {
+        return <PopUp iconUrl={modalData[1].iconUrl} title={modalData[1].title} subtitle={modalData[1].subtitle} textcolor={'#' + modalData[1].textColor}>
+          <CustomButton text="Nej" color={'#' + modalData[1].buttonColor} route={() => this.closeModal()} width={120} />
+          <CustomButton text="Ja" color={'#' + modalData[1].buttonColor} route={() => this.handlePress('WorkNext')} width={120} />
+        </PopUp>
+      }
+      if (this.state.popUpType == 'WorkNext') {
+        return <PopUp iconUrl='briefcase' title='Sådär!' subtitle='Din arbetsledare har blivit noterad. Ha en bra dag på jobbet!'>
+          <CustomButton text="Ok" color="teal" route={() => this.closeModal()} width={120} />
+        </PopUp>
+      }
+    }
+  }
   render() {
     return (
-      <View style={styles.container}>
-        <CustomHeader>
-          <Logo></Logo>
-        </CustomHeader>
-        <View style={styles.titleContainer}>
-          <Text style={styles.titleText}>Hur är läget?</Text>
-        </View>
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.menucontainer}>
-          <MenuButton route={() => this.props.navigation.navigate("Sick")} iconName="heart-outline" text="Sjukanmälan"/>
-          <MenuButton route={() => this.props.navigation.navigate("Vab")} iconName="baby-buggy" text="Vab-anmälan"/>
-          <MenuButton route={() => this.handlePress('Phone')} iconName="phone" text="Ring upp mig"/>
-          <MenuButton route={() => this.handlePress('Work')} iconName="briefcase" text="Tillbaka i arbete"/>
-          <MenuButton route={() => this.props.navigation.navigate("Links")} iconName="file-document" text="Mina anmälningar"/>
-          <MenuButton route={() => this.props.navigation.navigate("Links")} iconName="account" text="Min profil"/>
-
+          {this.renderMenu()}
         </View>
         <Modal
-          isVisible={this.state.modalVisible}
+          isOpen={this.state.modalVisible}
           style={styles.modalcontainer}
-          >
-          {this.modalcontentRender()}<View></View>
+        >
+          {this.modalcontentRender()}
+          <View></View>
         </Modal>
-      </View>
+        <View style={styles.activeReport}>
+          <TouchableOpacity
+            onPress={() => this.handlePress('active')}>
+            <Text>Sjukanmäld sedan 2018-01-20</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#F0F0F1',
     flex: 1,
+  },
+  DrawerModal:
+  {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   menucontainer:
   {
-    flex:1,
-    padding:10,
-    justifyContent:'space-around',
-    flexDirection:'row',
-    paddingTop:25,
-    flexWrap: 'wrap',
+    flex: 1,
+    padding: 10,
+    paddingTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  titleContainer :
+  titleContainer:
   {
-    marginTop:40,
-    marginBottom:50,
-    justifyContent:'center',
-    alignItems:'center',
+    marginTop: 40,
+    marginBottom: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   titleText:
   {
-    fontSize:30,
-    fontWeight:'700',
+    fontSize: 30,
+    fontWeight: '900',
   },
   modalcontainer:
   {
-    flex:0,
-    height:380,
-    marginTop:'auto',
-    marginBottom:'auto',
-    backgroundColor:'#ffd8d6'
-
+    height: 500,
+    width: 330,
+    borderRadius:15,
+  },
+  activeReport: 
+  {
+    height:80,
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor:'gold'
   }
-
-
 });

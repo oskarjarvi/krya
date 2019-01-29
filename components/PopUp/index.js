@@ -8,16 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import CustomButton from '../../components/CustomButton'
-import CustomHeader from '../../components/CustomHeader'
-import CustomIcon from '../../components/CustomIcon'
+
 
 export default class PopUp extends React.Component
 {
+  
   render(){
     return(
-      <View style={styles.popup}>
-        <CustomIcon iconName={this.props.iconName} style={styles.icon}/>
+      <View style={[styles.popup, { color: this.props.textcolor }]}>
+        <Image
+        source={{uri:''+this.props.iconUrl}}
+                  style={styles.icon}
+                />
         <View style={styles.text}>
           <Text style={styles.title}>{this.props.title}</Text>
           <Text style={styles.subtitle}>{this.props.subtitle}</Text>
@@ -56,4 +58,9 @@ const styles = StyleSheet.create({
   text: {
       padding:10,
   },
+  icon:
+  {
+    width:80,
+    height:80,
+  }
 })

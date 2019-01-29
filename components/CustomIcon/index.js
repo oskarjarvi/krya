@@ -9,26 +9,26 @@ import {
   View,
 } from 'react-native';
 import { Icon } from 'expo';
-import { Ionicons} from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
-export default class CustomIcon extends React.Component
-{
-  render(){
-    return(
-      <View style={styles.icon}>
-        <Icon.MaterialCommunityIcons
-          name={this.props.iconName}
-          size={50}
-          />
+export default class CustomIcon extends React.Component {
+  render() {
+    return (
+      <View style={styles.iconcontainer}>
+        <Image source={{ uri: '' + this.props.iconUrl }}
+          style={styles.icon} />
       </View>
     )
   }
 }
 const styles = StyleSheet.create({
+  iconcontainer: {
+    paddingTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   icon: {
-    paddingTop:20,
-    justifyContent:'center',
-    alignItems:'center',
-
+    width: 100,
+    height: 90,
   }
 })

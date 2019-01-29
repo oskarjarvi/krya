@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'expo';
-import { Ionicons} from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import {
   Image,
   Platform,
@@ -15,39 +15,46 @@ import {
 } from 'react-native';
 
 
-export default class MenuButton extends React.Component
-{
-render(){
-  return(
-    <View style={styles.MenuButton}>
-      <TouchableOpacity
-      onPress={this.props.route}>
-      <Icon.MaterialCommunityIcons
-        name={this.props.iconName}
-        size={50}
-        style={styles.icon}
-        />
-      <Text style={styles.text}>{this.props.text} </Text>
-    </TouchableOpacity>
-  </View>
-  )
-}
+export default class MenuButton extends React.Component {
+
+  render() {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={this.props.route}
+          style={styles.MenuButton}>
+          <Image
+            source={{ uri: '' + this.props.iconUrl }}
+            style={styles.icon}
+          />
+          <Text style={styles.text}>{this.props.text} </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 }
 const styles = StyleSheet.create({
   MenuButton:
   {
-    marginTop:10,
-    height:120,
-    width:'48%',
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:'#ffd8d6',
+    borderRadius: 15,
+    padding: 20,
+    marginTop: 10,
+    height: 130,
+    width: 320,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    flexDirection: 'row',
   },
-  icon: {
-    textAlign:'center'
+  icon:
+  {
+    resizeMode: 'contain',
+    width: 80,
+    height: 80,
   },
   text: {
-    margin:10,
-    fontWeight:'500',
+    textAlign: 'center',
+    margin: 10,
+    fontSize: 20,
+    fontWeight: '500',
   }
 })

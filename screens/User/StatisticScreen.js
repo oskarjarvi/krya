@@ -8,12 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Logo from '../../components/Logo';
 import { WebBrowser } from 'expo';
-import DayCounter from '../../components/DayCounter'
-import CustomButton from '../../components/CustomButton'
-import ProgressBar from '../../components/ProgressBar'
-import CustomHeader from '../../components/CustomHeader'
 import { NavigationActions } from 'react-navigation'
 
 export default class HomeScreen extends React.Component {
